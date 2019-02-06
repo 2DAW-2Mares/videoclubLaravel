@@ -26,10 +26,37 @@ class CatalogController extends Controller
     {
         return view('catalog.create');
     }
+    
+    public function postCreate(Request $request)
+    {
+        $movie = new Movie();
+        $movie->title = $request->title;
+        $movie->year = $request->year;
+        $movie->director = $request->director;
+        $movie->poster = $request->poster;
+        $movie->synopsis = $request->synopsis;
+        $movie->save();
+        return redirect('/catalog');
+    }    
 
     public function getEdit($id)
     {
-        return view('catalog.edit', array('id'=>$id));
+        $pelicula = Movie::findOrFail($id);
+        return view('catalog.edit', array(
+            'pelicula' => $pelicula
+        ));
+    }
+
+    public function putEdit(Request $request, $id)
+    {
+        $pelicula = Movie::findOrFail($id);
+        $pelicula->title = $request->title;
+        $pelicula->year = $request->year;
+        $pelicula->director = $request->director;
+        $pelicula->poster = $request->poster;
+        $pelicula->synopsis = $request->synopsis;
+        $pelicula->save();
+        return redirect('/catalog/show/' . $pelicula->id);
     }
 
     public function changeRented($id)

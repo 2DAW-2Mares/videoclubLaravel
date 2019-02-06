@@ -11,27 +11,29 @@
 |
 */
 
-Route::get('/', 'HomeController@getHome');
 
-Route::get('login', function () {
-    return view('auth.login');
-});
 
-Route::get('logout', function () {
-    return view('auth.logout');
-});
 
-Route::group(['prefix' => 'catalog'], function(){
+Route::group(['middleware' => 'auth'], function(){
+    
+    Route::get('/', 'HomeController@index');
+    
+    Route::group(['prefix' => 'catalog'], function(){
 
-    Route::get('/', 'CatalogController@getIndex');
+        Route::get('/', 'CatalogController@getIndex');
 
-    Route::get('show/{id}', 'CatalogController@getShow');
+        Route::get('show/{id}', 'CatalogController@getShow');
 
-    Route::get('create', 'CatalogController@getCreate');
+        Route::get('create', 'CatalogController@getCreate');
 
-    Route::get('edit/{id}', 'CatalogController@getEdit');
+        Route::get('edit/{id}', 'CatalogController@getEdit');
 
-    Route::put('changeRented/{id}', 'CatalogController@changeRented');
+        Route::post('create', 'CatalogController@postCreate');
+
+        Route::put('edit/{id}', 'CatalogController@putEdit');
+
+        Route::put('changeRented/{id}', 'CatalogController@changeRented');
+    });
 });
 
 
